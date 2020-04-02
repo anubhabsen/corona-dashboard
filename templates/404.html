@@ -14,31 +14,6 @@
 		{% include 'base.html' %}
     	{% block content %}
     	{% endblock %}
-    	<h1 class="h1">United States</h1>
-		<div class="table-responsive table-hover">
-	  		<table class="table">
-	  			<caption>&nbsp; Last Updated: {{ table_data.time }}</caption>
-	  			<thead>
-				    <tr>
-				      <th scope="col">Positives</th>
-				      <th scope="col">Negatives</th>
-				      <th scope="col">Total Tested</th>
-				      <th scope="col">Hospitalized</th>
-				      <th scope="col">Deaths</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    <tr>
-				      <td>{{ table_data.positives }}</td>
-				      <td>{{ table_data.negatives }}</td>
-				      <td>{{ table_data.tested }}</td>
-				      <td>{{ table_data.hospitalized }}</td>
-				      <td>{{ table_data.deaths }}</td>
-				    </tr>
-				</tbody>
-	  		</table>
-		</div>
-		<div id="container" class="svg-container"></div>
-		<script src="{{ url_for('static', filename='js/line_us.js') }}"></script>
-	</body>
+    	<p class="p">Oops! The page requested doesn't exist</p>
+   	</body>
 </html>

@@ -15,6 +15,22 @@ def index():
 	# updated_time = str(datetime.datetime.strptime(total['lastModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = total['lastModified']
 	table_data = {'positives': total_positive, 'negatives': total_negative, 'tested': total_conclusive_tested, 'hospitalized': total_hospitalized, 'deaths': total_death, 'time': updated_time}
+	cumulative = requests.get("https://covidtracking.com/api/us/daily").json()
+	positives, deaths, date = [], [], []
+	for day in cumulative:
+		positives.append(day['positive'])
+		deaths.append(day['death'])
+		date.append(day['date'])
+	positives = positives[::-1]
+	deaths = deaths[::-1]
+	date = date[::-1]
+	f = open("static/data/usa.csv", "w")
+	f.write("date,Positives,Deaths\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
+		f.write(line)
+	f.close()
+
 	return render_template('index.html', table_data = table_data, states = states)
 
 @app.route('/state/<state>')
@@ -43,3 +59,8 @@ def state(state=None):
 	updated_time = state_info['dateModified']
 	table_data = {'state': states[state], 'positives': state_positive, 'negatives': state_negative, 'tested': state_conclusive_tested, 'hospitalized': state_hospitalized, 'deaths': state_death, 'time': updated_time, 'pending': state_pending}
 	return render_template('states.html', table_data = table_data, states = states)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html', states = states), 404
