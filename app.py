@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import datetime
 from states import states
 import requests
@@ -7,15 +7,15 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 	total = requests.get('https://covidtracking.com/api/us').json()[0]
-	total_positive = str(total['positive'])
-	total_negative = str(total['negative'])
-	total_death = str(total['death'])
-	total_hospitalized = str(total['hospitalized'])
-	total_conclusive_tested = str(total['totalTestResults'])
+	total_positive = str(format(total['positive'], ',d'))
+	total_negative = str(format(total['negative'], ',d'))
+	total_death = str(format(total['death'], ',d'))
+	total_hospitalized = str(format(total['hospitalized'], ',d'))
+	total_conclusive_tested = str(format(total['totalTestResults'], ',d'))
 	# updated_time = str(datetime.datetime.strptime(total['lastModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = total['lastModified']
-	# updated_time = updated_time[:-6] + ' UTC'
-	return 'Positives: ' + total_positive + '<br>' + 'Negatives: ' + total_negative + '<br>' + 'Hospitalized: ' + total_hospitalized + '<br>' + 'Tested (with results): ' + total_conclusive_tested + '<br>' + 'Deaths: ' + total_death + '<br>' + 'Last updated time: ' + updated_time
+	table_data = {'positives': total_positive, 'negatives': total_negative, 'tested': total_conclusive_tested, 'hospitalized': total_hospitalized, 'deaths': total_death, 'time': updated_time}
+	return render_template('index.html', table_data = table_data, states = states)
 
 @app.route('/state/<state>')
 def state(state=None):
@@ -27,13 +27,19 @@ def state(state=None):
 			break
 	if state_info == {}:
 		return 'Enter valid 2 alphabet state abbreviation'
-	state_positive = str(state_info['positive'])
-	state_negative = str(state_info['negative'])
-	state_death = str(state_info['death'])
-	state_pending = str(state_info['pending'])
-	state_hospitalized = str(state_info['hospitalized'])
-	state_conclusive_tested = str(state_info['totalTestResults'])
+	state_positive = str(format(state_info['positive'], ',d'))
+	state_negative = str(format(state_info['negative'], ',d'))
+	state_death = str(format(state_info['death'], ',d'))
+	if not state_info['pending']:
+		state_pending = 0
+	else:
+		state_pending = str(format(state_info['pending'], ',d'))
+	if not state_info['hospitalized']:
+		state_hospitalized = "Count not provided"
+	else:
+		state_hospitalized = str(format(state_info['hospitalized'], ',d'))
+	state_conclusive_tested = str(format(state_info['totalTestResults'], ',d'))
 	# updated_time = str(datetime.datetime.strptime(state_info['dateModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = state_info['dateModified']
-	# updated_time = updated_time[:-6] + ' UTC'
-	return '<h1>' + states[state.upper()] + '</h1><br>Positives: ' + state_positive + '<br>' + 'Negatives: ' + state_negative + '<br>' + 'Pending: ' + state_pending + '<br>' + 'Hospitalized: ' + state_hospitalized + '<br>' + 'Tested (with results): ' + state_conclusive_tested + '<br>' + 'Deaths: ' + state_death + '<br>' + 'Last updated time: ' + updated_time
+	table_data = {'state': states[state], 'positives': state_positive, 'negatives': state_negative, 'tested': state_conclusive_tested, 'hospitalized': state_hospitalized, 'deaths': state_death, 'time': updated_time, 'pending': state_pending}
+	return render_template('states.html', table_data = table_data, states = states)
