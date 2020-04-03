@@ -10,7 +10,7 @@ def index():
 	total_positive = str(format(total['positive'], ',d'))
 	total_negative = str(format(total['negative'], ',d'))
 	total_death = str(format(total['death'], ',d'))
-	total_hospitalized = str(format(total['hospitalized'], ',d'))
+	total_hospitalized = str(format(total['hospitalizedCurrently'], ',d'))
 	total_conclusive_tested = str(format(total['totalTestResults'], ',d'))
 	# updated_time = str(datetime.datetime.strptime(total['lastModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = total['lastModified']
@@ -30,7 +30,7 @@ def index():
 		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
-	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease']}
+	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease'], 'hosp': cumulative[0]['hospitalizedIncrease']}
 	return render_template('index.html', table_data = table_data, states = states, increases = increases)
 
 @app.route('/state/<state>')
@@ -50,10 +50,10 @@ def state(state=None):
 		state_pending = 0
 	else:
 		state_pending = str(format(state_info['pending'], ',d'))
-	if not state_info['hospitalized']:
+	if not state_info['hospitalizedCurrently']:
 		state_hospitalized = "Count not provided"
 	else:
-		state_hospitalized = str(format(state_info['hospitalized'], ',d'))
+		state_hospitalized = str(format(state_info['hospitalizedCurrently'], ',d'))
 	state_conclusive_tested = str(format(state_info['totalTestResults'], ',d'))
 	# updated_time = str(datetime.datetime.strptime(state_info['dateModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = state_info['dateModified']
@@ -80,7 +80,7 @@ def state(state=None):
 	# 	line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
 	# 	f.write(line)
 	# f.close()
-	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease']}
+	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
 	return render_template('states.html', table_data = table_data, states = states, increases = increases)
 
 @app.route('/world')
