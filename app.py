@@ -30,8 +30,8 @@ def index():
 		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
-
-	return render_template('index.html', table_data = table_data, states = states)
+	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease']}
+	return render_template('index.html', table_data = table_data, states = states, increases = increases)
 
 @app.route('/state/<state>')
 def state(state=None):
@@ -58,7 +58,35 @@ def state(state=None):
 	# updated_time = str(datetime.datetime.strptime(state_info['dateModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = state_info['dateModified']
 	table_data = {'state': states[state], 'positives': state_positive, 'negatives': state_negative, 'tested': state_conclusive_tested, 'hospitalized': state_hospitalized, 'deaths': state_death, 'time': updated_time, 'pending': state_pending}
-	return render_template('states.html', table_data = table_data, states = states)
+	cumulative = requests.get('https://covidtracking.com/api/v1/states/daily.json').json()
+	filtered = []
+	for i in cumulative:
+		if i['state'].lower() == state.lower():
+			filtered.append(i)
+	positives, deaths, date = [], [], []
+	# for day in filtered:
+	# 	positives.append(day['positive'])
+	# 	if not 'death' in day.keys():
+	# 		deaths.append(0)
+	# 	else:
+	# 		deaths.append(day['death'])
+	# 	date.append(day['date'])
+	# positives = positives[::-1]
+	# deaths = deaths[::-1]
+	# date = date[::-1]
+	# f = open("static/data/states.csv", "w")
+	# f.write("date,Positives,Deaths\n")
+	# for i in range(len(positives)):
+	# 	line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
+	# 	f.write(line)
+	# f.close()
+	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease']}
+	return render_template('states.html', table_data = table_data, states = states, increases = increases)
+
+@app.route('/world')
+def world(state=None):
+	return render_template('world.html', states = states)
+
 
 @app.errorhandler(404)
 def page_not_found(e):
