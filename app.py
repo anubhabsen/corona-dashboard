@@ -3,6 +3,7 @@ import datetime
 from states import states
 import requests
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def index():
