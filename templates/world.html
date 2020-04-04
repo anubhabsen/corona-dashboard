@@ -14,6 +14,35 @@
 		{% include 'base.html' %}
     	{% block content %}
     	{% endblock %}
-    	<h1 class="h1">Not Ready Yet</h1>
+    	<h1 class="h1">World Stats</h1>
+    	<div class="table-responsive table-hover">
+	  		<table class="table">
+	  			<!-- <caption>&nbsp; Last Updated: {{ table_data.time }}</caption> -->
+	  			<thead>
+				    <tr>
+				      <th scope="col">Country</th>
+				      <th scope="col">Positives</th>
+				      <th scope="col">Deaths</th>
+				      <th scope="col">Recovered</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	{% for i in table_data.country %}
+				  		{% set country = table_data.country[loop.index-1] %}
+      					{% set positives = table_data.positives[loop.index-1] %}
+      					{% set up_positives = table_data.up_positives[loop.index-1] %}
+      					{% set deaths = table_data.deaths[loop.index-1] %}
+      					{% set up_deaths = table_data.up_deaths[loop.index-1] %}
+      					{% set recovered = table_data.recovered[loop.index-1] %}
+				    <tr>
+				      <td>{{ country }}</td>
+				      <td>{{ positives }} (+{{ up_positives }})</td>
+				      <td>{{ deaths }} (+{{ up_deaths }})</td>
+				      <td>{{ recovered }}</td>
+				    </tr>
+    	  			{% endfor %}
+				</tbody>
+	  		</table>
+		</div>
 	</body>
 </html>

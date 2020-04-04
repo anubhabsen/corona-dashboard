@@ -85,7 +85,17 @@ def state(state=None):
 
 @app.route('/world')
 def world(state=None):
-	return render_template('world.html', states = states)
+	all_countries = requests.get('https://coronavirus-19-api.herokuapp.com/countries').json()
+	name, positives, positives_today, deaths, deaths_today, recovered = [], [], [], [], [], []
+	for country in all_countries:
+		name.append(country['country'])
+		positives.append(country['cases'])
+		positives_today.append(country['todayCases'])
+		deaths.append(country['deaths'])
+		deaths_today.append(country['todayDeaths'])
+		recovered.append(country['recovered'])
+	table_data = {'country': name, 'positives': positives, 'up_positives': positives_today, 'deaths': deaths, 'up_deaths': deaths_today, 'recovered': recovered}
+	return render_template('world.html', table_data = table_data, states = states)
 
 
 @app.errorhandler(404)

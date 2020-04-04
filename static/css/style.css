@@ -67,3 +67,20 @@ fill: #9c9c9c;
 	margin-left: 5%;
 	margin-right: 5%;
 }
+
+tr {
+width: 100%;
+display: inline-table;
+table-layout: fixed;
+}
+
+table{
+ height:70%;
+ display: -moz-groupbox;
+}
+tbody{
+  overflow-y: scroll;
+  height: 60%;
+  width: 100%;
+  position: absolute;
+}
