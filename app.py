@@ -64,22 +64,22 @@ def state(state=None):
 		if i['state'].lower() == state.lower():
 			filtered.append(i)
 	positives, deaths, date = [], [], []
-	# for day in filtered:
-	# 	positives.append(day['positive'])
-	# 	if not 'death' in day.keys():
-	# 		deaths.append(0)
-	# 	else:
-	# 		deaths.append(day['death'])
-	# 	date.append(day['date'])
-	# positives = positives[::-1]
-	# deaths = deaths[::-1]
-	# date = date[::-1]
-	# f = open("static/data/states.csv", "w")
-	# f.write("date,Positives,Deaths\n")
-	# for i in range(len(positives)):
-	# 	line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
-	# 	f.write(line)
-	# f.close()
+	for day in filtered:
+		positives.append(day['positive'])
+		if not 'death' in day.keys():
+			deaths.append(0)
+		else:
+			deaths.append(day['death'])
+		date.append(day['date'])
+	positives = positives[::-1]
+	deaths = deaths[::-1]
+	date = date[::-1]
+	f = open("static/data/states.csv", "w")
+	f.write("date,Positives,Deaths\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
+		f.write(line)
+	f.close()
 	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
 	return render_template('states.html', table_data = table_data, states = states, increases = increases)
 
