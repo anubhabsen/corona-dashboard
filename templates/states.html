@@ -4,11 +4,14 @@
 	  	<meta charset="utf-8">
 	  	<title>Covid19 Dashboard</title>
 	  	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	  	<link rel="stylesheet" href="https://unpkg.com/dc@4/dist/style/dc.css">
 	  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	  	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/dc@4/dist/dc.js"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/crossfilter.js') }}"></script>
 	</head>
 	<body>
 		{% include 'base.html' %}
@@ -40,7 +43,46 @@
 				</tbody>
 	  		</table>
 		</div>
-		<div id="container" class="svg-container"></div>
+		<div class="flex-container">
+			<div id="container" class="svg-container"></div>
+			<div id="piechart"></div>
+		</div>
 		<script src="{{ url_for('static', filename='js/line_states.js') }}"></script>
+		<script type="text/javascript">
+			var chart = dc.pieChart("#piechart");
+			var positives = "{{ table_data.positives }}";
+			positives = positives.replace(/\,/g,'');
+			positives = parseInt(positives,10);
+			var deaths = "{{ table_data.deaths }}";
+			deaths = deaths.replace(/\,/g,'');
+			deaths = parseInt(deaths,10);
+			console.log(positives, deaths)
+			var data          = [
+			  { 'Expt': 1, 'Run': 1, 'Speed': positives, 'title': 'Curent Cases '.concat({{ table_data.positives }})  },
+			  { 'Expt': 1, 'Run': 2, 'Speed': deaths, 'title': 'Deaths '.concat({{ table_data.deaths}})  },
+			  // { 'Expt': 1, 'Run': 3,  'Speed': 900, 'title': 'Recovered' },
+			];
+			var ndx = crossfilter(data), runDimension  = ndx.dimension(function(d) {
+			      return d.title;
+			    });
+			    speedSumGroup = runDimension.group().reduceSum(function(d) {
+			      return d.Speed * d.Run;
+			    });
+
+			  chart
+			    .width(300)
+			    .height(300)
+			    // .externalLabels(50)
+       //    		.externalRadiusPadding(50)
+       //    		.drawPaths(true)
+			    .dimension(runDimension)
+			    .group(speedSumGroup) // by default, pie charts will use group.key as the label
+			    .renderLabel(true)
+			    .label(function (d) {
+			      return d.key.toUpperCase();
+			    });
+
+			  chart.render();
+		</script>
 	</body>
 </html>

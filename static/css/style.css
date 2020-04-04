@@ -64,23 +64,30 @@ fill: #9c9c9c;
 }
 
 .svg-container {
-	margin-left: 5%;
-	margin-right: 5%;
+	width: 40%;
 }
 
-tr {
+tr.world {
 width: 100%;
 display: inline-table;
 table-layout: fixed;
 }
 
-table{
+table.world{
  height:70%;
  display: -moz-groupbox;
 }
-tbody{
+tbody.world{
   overflow-y: scroll;
   height: 60%;
   width: 100%;
   position: absolute;
+}
+
+.flex-container {
+	display: flex;
+}
+
+.piechart {
+	margin: auto;
 }
