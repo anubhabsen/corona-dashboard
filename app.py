@@ -75,10 +75,16 @@ def state(state=None):
 	positives = positives[::-1]
 	deaths = deaths[::-1]
 	date = date[::-1]
-	f = open("static/data/states.csv", "w")
-	f.write("date,Positives,Deaths\n")
+	f = open("static/data/states_positives.csv", "w")
+	f.write("date,Positives\n")
 	for i in range(len(positives)):
-		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
+		line = str(date[i]) + ',' + str(positives[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/states_deaths.csv", "w")
+	f.write("date,Deaths\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
