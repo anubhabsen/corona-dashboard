@@ -25,10 +25,16 @@ def index():
 	positives = positives[::-1]
 	deaths = deaths[::-1]
 	date = date[::-1]
-	f = open("static/data/usa.csv", "w")
-	f.write("date,Positives,Deaths\n")
+	f = open("static/data/usa_positives.csv", "w")
+	f.write("date,Positives\n")
 	for i in range(len(positives)):
-		line = str(date[i]) + ',' + str(positives[i]) + ',' + str(deaths[i]) + '\n'
+		line = str(date[i]) + ',' + str(positives[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/usa_deaths.csv", "w")
+	f.write("date,Deaths\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease'], 'hosp': cumulative[0]['hospitalizedIncrease']}
