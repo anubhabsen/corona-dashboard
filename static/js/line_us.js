@@ -167,3 +167,5 @@ function drawGraph(name) {
 
 drawGraph('usa_positives')
 drawGraph('usa_deaths')
+drawGraph('usa_positives_i')
+drawGraph('usa_deaths_i')

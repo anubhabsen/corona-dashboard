@@ -38,8 +38,14 @@
 				</tbody>
 	  		</table>
 		</div>
-		<div id="usa_positives" class="svg-container"></div>
-		<div id="usa_deaths" class="svg-container"></div>
+		<div class="flex-container">
+			<div id="usa_positives" class="svg-container"></div>
+			<div id="usa_positives_i" class="svg-container"></div>
+		</div>
+		<div class="flex-container">
+			<div id="usa_deaths" class="svg-container"></div>
+			<div id="usa_deaths_i" class="svg-container"></div>
+		</div>
 		<script src="{{ url_for('static', filename='js/line_us.js') }}"></script>
 		<!-- <script src="{{ url_for('static', filename='js/usa_map.js') }}"></script> -->
 		{% include 'footer.html' %}

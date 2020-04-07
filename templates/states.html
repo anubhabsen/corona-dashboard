@@ -45,9 +45,13 @@
 		</div>
 		<div class="flex-container">
 			<div id="states_positives" class="svg-container"></div>
-			<div id="states_deaths" class="svg-container"></div>
-			<div id="piechart"></div>
+			<div id="states_positives_i" class="svg-container"></div>
 		</div>
+		<div class="flex-container">
+			<div id="states_deaths" class="svg-container"></div>
+			<div id="states_deaths_i" class="svg-container"></div>
+		</div>
+		<div id="piechart"></div>
 		<script src="{{ url_for('static', filename='js/line_states.js') }}"></script>
 		<script type="text/javascript">
 			var chart = dc.pieChart("#piechart");

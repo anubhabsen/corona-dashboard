@@ -166,4 +166,6 @@ function drawGraph(name) {
 }
 
 drawGraph('states_positives')
+drawGraph('states_positives_i')
 drawGraph('states_deaths')
+drawGraph('states_deaths_i')

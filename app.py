@@ -17,14 +17,24 @@ def index():
 	updated_time = total['lastModified']
 	table_data = {'positives': total_positive, 'negatives': total_negative, 'tested': total_conclusive_tested, 'hospitalized': total_hospitalized, 'deaths': total_death, 'time': updated_time}
 	cumulative = requests.get("https://covidtracking.com/api/us/daily").json()
-	positives, deaths, date = [], [], []
+	positives, deaths, date ,death_i, positive_i = [], [], [], [], []
 	for day in cumulative:
 		positives.append(day['positive'])
 		deaths.append(day['death'])
 		date.append(day['date'])
+		if not day['deathIncrease']:
+			death_i.append(0)
+		else:
+			death_i.append(day['deathIncrease'])
+		if not day['positiveIncrease']:
+			positive_i.append(0)
+		else:
+			positive_i.append(day['positiveIncrease'])
 	positives = positives[::-1]
 	deaths = deaths[::-1]
 	date = date[::-1]
+	positive_i = positive_i[::-1]
+	death_i = death_i[::-1]
 	f = open("static/data/usa_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
@@ -35,6 +45,18 @@ def index():
 	f.write("date,Deaths\n")
 	for i in range(len(positives)):
 		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/usa_positives_i.csv", "w")
+	f.write("date,Positives (per day)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(positive_i[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/usa_deaths_i.csv", "w")
+	f.write("date,Deaths (per day)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease'], 'hosp': cumulative[0]['hospitalizedIncrease']}
@@ -70,7 +92,7 @@ def state(state=None):
 	for i in cumulative:
 		if i['state'].lower() == state.lower():
 			filtered.append(i)
-	positives, deaths, date = [], [], []
+	positives, deaths, date, death_i, positive_i = [], [], [], [], []
 	for day in filtered:
 		positives.append(day['positive'])
 		if not 'death' in day.keys():
@@ -78,9 +100,19 @@ def state(state=None):
 		else:
 			deaths.append(day['death'])
 		date.append(day['date'])
+		if not day['deathIncrease']:
+			death_i.append(0)
+		else:
+			death_i.append(day['deathIncrease'])
+		if not day['positiveIncrease']:
+			positive_i.append(0)
+		else:
+			positive_i.append(day['positiveIncrease'])
 	positives = positives[::-1]
 	deaths = deaths[::-1]
 	date = date[::-1]
+	positive_i = positive_i[::-1]
+	death_i = death_i[::-1]
 	f = open("static/data/states_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
@@ -91,6 +123,18 @@ def state(state=None):
 	f.write("date,Deaths\n")
 	for i in range(len(positives)):
 		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/states_positives_i.csv", "w")
+	f.write("date,Positives (per day)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(positive_i[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/states_deaths_i.csv", "w")
+	f.write("date,Deaths (per day)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
