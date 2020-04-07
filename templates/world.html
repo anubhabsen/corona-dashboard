@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		{% include 'base.html' %}
-    	{% block content %}
+    	{% block navbar %}
     	{% endblock %}
     	<h1 class="h1">World Stats</h1>
     	<div class="table-responsive table-hover">
@@ -44,5 +44,8 @@
 				</tbody>
 	  		</table>
 		</div>
+		{% include 'footer.html' %}
+    	{% block foot %}
+    	{% endblock %}
 	</body>
 </html>

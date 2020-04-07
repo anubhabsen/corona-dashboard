@@ -15,7 +15,7 @@
 	</head>
 	<body>
 		{% include 'base.html' %}
-    	{% block content %}
+    	{% block navbar %}
     	{% endblock %}
     	<h1 class="h1">{{ table_data.state }}</h1>
 		<div class="table-responsive table-hover">
@@ -84,5 +84,8 @@
 
 			  chart.render();
 		</script>
+		{% include 'footer.html' %}
+    	{% block foot %}
+    	{% endblock %}
 	</body>
 </html>

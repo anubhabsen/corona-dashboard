@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		{% include 'base.html' %}
-    	{% block content %}
+    	{% block navbar %}
     	{% endblock %}
     	<h1 class="h1">United States</h1>
 		<div class="table-responsive table-hover">
@@ -42,5 +42,8 @@
 		<div id="usa_deaths" class="svg-container"></div>
 		<script src="{{ url_for('static', filename='js/line_us.js') }}"></script>
 		<!-- <script src="{{ url_for('static', filename='js/usa_map.js') }}"></script> -->
+		{% include 'footer.html' %}
+    	{% block foot %}
+    	{% endblock %}
 	</body>
 </html>
