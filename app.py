@@ -17,7 +17,7 @@ def index():
 	updated_time = total['lastModified']
 	table_data = {'positives': total_positive, 'negatives': total_negative, 'tested': total_conclusive_tested, 'hospitalized': total_hospitalized, 'deaths': total_death, 'time': updated_time}
 	cumulative = requests.get("https://covidtracking.com/api/us/daily").json()
-	positives, deaths, date ,death_i, positive_i = [], [], [], [], []
+	positives, deaths, date ,death_i, positive_i, hospitalized_cumu, hospitalized_current = [], [], [], [], [], [], []
 	for day in cumulative:
 		positives.append(day['positive'])
 		deaths.append(day['death'])
@@ -30,11 +30,21 @@ def index():
 			positive_i.append(0)
 		else:
 			positive_i.append(day['positiveIncrease'])
+		if not day['hospitalizedCumulative']:
+			hospitalized_cumu.append(0)
+		else:
+			hospitalized_cumu.append(day['hospitalizedCumulative'])
+		if not day['hospitalizedCurrently']:
+			hospitalized_current.append(0)
+		else:
+			hospitalized_current.append(day['hospitalizedCurrently'])
 	positives = positives[::-1]
 	deaths = deaths[::-1]
 	date = date[::-1]
 	positive_i = positive_i[::-1]
 	death_i = death_i[::-1]
+	hospitalized_cumu = hospitalized_cumu[::-1]
+	hospitalized_current = hospitalized_current[::-1]
 	f = open("static/data/usa_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
@@ -57,6 +67,18 @@ def index():
 	f.write("date,Deaths (per day)\n")
 	for i in range(len(positives)):
 		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/usa_hospital_i.csv", "w")
+	f.write("date,Hospitalized (current)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(hospitalized_current[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/usa_hospital_cumu.csv", "w")
+	f.write("date,Hospitalized (cumulative)\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(hospitalized_cumu[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': cumulative[0]['deathIncrease'], 'positive': cumulative[0]['positiveIncrease'], 'hosp': cumulative[0]['hospitalizedIncrease']}
