@@ -1,8 +1,8 @@
 function drawGraph(name) {
     //------------------------1. PREPARATION------------------------//
     //-----------------------------SVG------------------------------//
-    const width = 960;
-    const height = 500;
+    const width = 1800;
+    const height = 900;
     const margin = 5;
     const padding = 5;
     const adj = 30;

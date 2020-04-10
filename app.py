@@ -48,36 +48,54 @@ def index():
 	f = open("static/data/usa_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
+		if positives[i] == 0:
+			continue
 		line = str(date[i]) + ',' + str(positives[i]) + '\n'
 		f.write(line)
 	f.close()
 	f = open("static/data/usa_deaths.csv", "w")
 	f.write("date,Deaths\n")
 	for i in range(len(positives)):
+		if deaths[i] == 0:
+			continue
 		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
 	f = open("static/data/usa_positives_i.csv", "w")
 	f.write("date,Positives (per day)\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(positive_i) and positive_i[i] == 0:
+		i += 1
+	while i < len(positive_i):
 		line = str(date[i]) + ',' + str(positive_i[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	f = open("static/data/usa_deaths_i.csv", "w")
 	f.write("date,Deaths (per day)\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(death_i) and death_i[i] == 0:
+		i += 1
+	while i < len(death_i):
 		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	f = open("static/data/usa_hospital_i.csv", "w")
 	f.write("date,Hospitalized (current)\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(hospitalized_current) and hospitalized_current[i] == 0:
+		i += 1
+	while i < len(hospitalized_current):
 		line = str(date[i]) + ',' + str(hospitalized_current[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	f = open("static/data/usa_hospital_cumu.csv", "w")
 	f.write("date,Hospitalized (cumulative)\n")
 	for i in range(len(positives)):
+		if hospitalized_cumu[i] == 0:
+			continue
 		line = str(date[i]) + ',' + str(hospitalized_cumu[i]) + '\n'
 		f.write(line)
 	f.close()
@@ -134,32 +152,48 @@ def state(state=None):
 	f = open("static/data/states_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
+		if positives[i] == 0:
+			continue
 		line = str(date[i]) + ',' + str(positives[i]) + '\n'
 		f.write(line)
 	f.close()
 	f = open("static/data/states_deaths.csv", "w")
 	f.write("date,Deaths\n")
 	for i in range(len(positives)):
+		if deaths[i] == 0:
+			continue
 		line = str(date[i]) + ',' + str(deaths[i]) + '\n'
 		f.write(line)
 	f.close()
 	f = open("static/data/states_positives_i.csv", "w")
 	f.write("date,Positives (per day)\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(positive_i) and positive_i[i] == 0:
+		i += 1
+	while i < len(positive_i):
 		line = str(date[i]) + ',' + str(positive_i[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	f = open("static/data/states_deaths_i.csv", "w")
 	f.write("date,Deaths (per day)\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(death_i) and death_i[i] == 0:
+		i += 1
+	while i < len(death_i):
 		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	f = open("static/data/states_hosp.csv", "w")
 	f.write("date,Hospitalized\n")
-	for i in range(len(positives)):
+	i = 0
+	while i < len(hosp) and hosp[i] == 0:
+		i += 1
+	while i < len(hosp):
 		line = str(date[i]) + ',' + str(hosp[i]) + '\n'
 		f.write(line)
+		i += 1
 	f.close()
 	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
 	return render_template('states.html', table_data = table_data, states = states, increases = increases)
