@@ -104,12 +104,8 @@ def state(state=None):
 	# updated_time = str(datetime.datetime.strptime(state_info['dateModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = state_info['dateModified']
 	table_data = {'state': states[state], 'positives': state_positive, 'negatives': state_negative, 'tested': state_conclusive_tested, 'hospitalized': state_hospitalized, 'deaths': state_death, 'time': updated_time, 'pending': state_pending}
-	cumulative = requests.get('https://covidtracking.com/api/v1/states/daily.json').json()
-	filtered = []
-	for i in cumulative:
-		if i['state'].lower() == state.lower():
-			filtered.append(i)
-	positives, deaths, date, death_i, positive_i = [], [], [], [], []
+	filtered = requests.get('https://covidtracking.com/api/states/daily?state='+state).json()
+	positives, deaths, date, death_i, positive_i, hosp = [], [], [], [], [], []
 	for day in filtered:
 		positives.append(day['positive'])
 		if not 'death' in day.keys():
@@ -125,11 +121,16 @@ def state(state=None):
 			positive_i.append(0)
 		else:
 			positive_i.append(day['positiveIncrease'])
-	positives = positives[::-1]
-	deaths = deaths[::-1]
-	date = date[::-1]
-	positive_i = positive_i[::-1]
-	death_i = death_i[::-1]
+		if 'hospitalizedCurrently' not in day or not day['hospitalizedCurrently']:
+			hosp.append(0)
+		else:
+			hosp.append(day['hospitalizedCurrently'])
+	positives.reverse()
+	deaths.reverse()
+	date.reverse()
+	positive_i.reverse()
+	death_i.reverse()
+	hosp.reverse()
 	f = open("static/data/states_positives.csv", "w")
 	f.write("date,Positives\n")
 	for i in range(len(positives)):
@@ -152,6 +153,12 @@ def state(state=None):
 	f.write("date,Deaths (per day)\n")
 	for i in range(len(positives)):
 		line = str(date[i]) + ',' + str(death_i[i]) + '\n'
+		f.write(line)
+	f.close()
+	f = open("static/data/states_hosp.csv", "w")
+	f.write("date,Hospitalized\n")
+	for i in range(len(positives)):
+		line = str(date[i]) + ',' + str(hosp[i]) + '\n'
 		f.write(line)
 	f.close()
 	increases = {'death': filtered[0]['deathIncrease'], 'positive': filtered[0]['positiveIncrease'], 'hosp': filtered[0]['hospitalizedIncrease']}
