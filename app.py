@@ -86,13 +86,8 @@ def index():
 
 @app.route('/state/<state>')
 def state(state=None):
-	total = requests.get('https://covidtracking.com/api/states').json()
-	state_info = {}
-	for i in total:
-		if i['state'].lower() == state.lower():
-			state_info = i
-			break
-	if state_info == {}:
+	state_info = requests.get('https://covidtracking.com/api/states?state='+state).json()
+	if 'error' in state_info:
 		return 'Enter valid 2 alphabet state abbreviation'
 	state_positive = str(format(state_info['positive'], ',d'))
 	state_negative = str(format(state_info['negative'], ',d'))
