@@ -16,7 +16,8 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           States
         </a>
-        <div class="dropdown-menu scrollable-menu" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu scrollable-menu" id="drop_search" aria-labelledby="navbarDropdown">
+          <input class="dropdown-item" type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
           {% for key, value in states.items() %}
     	  	<a class="dropdown-item" href="/state/{{ key }}">{{ value }}</a>
     	  {% endfor %}
@@ -25,3 +26,20 @@
     </ul>
   </div>
 </nav>
+<script>
+function filterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("drop_search");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+</script>
