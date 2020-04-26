@@ -20,7 +20,10 @@ def index():
 	positives, deaths, date ,death_i, positive_i, hospitalized_cumu, hospitalized_current = [], [], [], [], [], [], []
 	for day in cumulative:
 		positives.append(day['positive'])
-		deaths.append(day['death'])
+		if 'death' in day:
+			deaths.append(day['death'])
+		else:
+			deaths.append(0)
 		date.append(day['date'])
 		if not day['deathIncrease']:
 			death_i.append(0)
@@ -30,11 +33,11 @@ def index():
 			positive_i.append(0)
 		else:
 			positive_i.append(day['positiveIncrease'])
-		if not day['hospitalizedCumulative']:
+		if 'hospitalizedCumulative' not in day or not day['hospitalizedCumulative']:
 			hospitalized_cumu.append(0)
 		else:
 			hospitalized_cumu.append(day['hospitalizedCumulative'])
-		if not day['hospitalizedCurrently']:
+		if 'hospitalizedCurrently' not in day or not day['hospitalizedCurrently']:
 			hospitalized_current.append(0)
 		else:
 			hospitalized_current.append(day['hospitalizedCurrently'])
