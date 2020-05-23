@@ -125,7 +125,7 @@ def state(state=None):
 	# updated_time = str(datetime.datetime.strptime(state_info['dateModified'], "%Y-%m-%dT%H:%M:%S%z"))
 	updated_time = state_info['dateModified']
 	table_data = {'state': states[state], 'positives': state_positive, 'negatives': state_negative, 'tested': state_conclusive_tested, 'hospitalized': state_hospitalized, 'deaths': state_death, 'time': updated_time, 'pending': state_pending}
-	filtered = requests.get('https://covidtracking.com/api/states/daily?state='+state).json()
+	filtered = requests.get('https://covidtracking.com/api/v1/states/' + state + '/daily.json').json()
 	positives, deaths, date, death_i, positive_i, hosp = [], [], [], [], [], []
 	for day in filtered:
 		positives.append(day['positive'])
